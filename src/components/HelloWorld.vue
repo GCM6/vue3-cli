@@ -1,47 +1,49 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { ImagePreview, Toast } from 'vant'
 import { testFetch } from '@/api'
 // defineProps<{ msg: string }>();
-
+const currentDate = ref(new Date())
 const count = ref(0);
+const show = ref(false)
 async function fetchApi() {
   try {
-    await testFetch();
+    // await testFetch();
   count.value ++;
+  Toast('提示内容');
   } catch (error) {
+    Toast('提示内容');
     console.log(error);
     
   }
 
 }
-
+function showPopup() {
+  ImagePreview([
+  'https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg',
+  'https://fastly.jsdelivr.net/npm/@vant/assets/apple-2.jpeg',
+]);
+  // show.value = true
+}
 </script>
 
 <template>
-  <div class="card">
-    <button type="button" @click="fetchApi">count is {{ count }}</button>
-    <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
-    </p>
-    <strong class="text">{{ count }}</strong>
-  </div>
+  <van-cell is-link @click="showPopup">展示弹出层</van-cell>
 
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Install
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-    in your IDE for a better DX
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
+<van-popup v-model:show="show" position="bottom">
+  <van-datetime-picker
+  v-model="currentDate"
+  type="date"
+  title="选择年月日"
+  />
+</van-popup>
+
+<button type="button" @click="fetchApi">count is {{ count }}</button>
+
 </template>
 
 <style scoped lang="scss">
+  
 .card {
   .text {
     color: $test-color;
